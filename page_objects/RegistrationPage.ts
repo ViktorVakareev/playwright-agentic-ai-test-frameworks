@@ -27,6 +27,11 @@ export class RegistrationPage {
   readonly firstNameError: Locator;
   readonly lastNameError: Locator;
 
+  // Created By AI — Date of birth calendar (required by Scenario-001)
+  readonly datePickerCalendar: Locator;
+  readonly datePickerYearSelect: Locator;
+  readonly datePickerMonthSelect: Locator;
+
   // Confirmation dialog
   readonly confirmationDialog: Locator;
   readonly confirmationTitle: Locator;
@@ -54,6 +59,11 @@ export class RegistrationPage {
 
     this.firstNameError = page.getByText('First Name is a required field');
     this.lastNameError = page.getByText('Last Name is a required field');
+
+    // Created By AI — Date of birth calendar (required by Scenario-001)
+    this.datePickerCalendar = page.locator('.react-datepicker');
+    this.datePickerYearSelect = this.datePickerCalendar.locator('.react-datepicker__year-select');
+    this.datePickerMonthSelect = this.datePickerCalendar.locator('.react-datepicker__month-select');
 
     this.confirmationDialog = page.getByRole('dialog');
     this.confirmationTitle = this.confirmationDialog.getByText('Thanks for submitting the form').first();
@@ -98,6 +108,22 @@ export class RegistrationPage {
   public async setDateOfBirth(date: string): Promise<void> {
     await this.dateOfBirthField.fill(date);
     await this.dateOfBirthField.press('Enter');
+  }
+
+  // Created By AI — pick Date of birth from the calendar (required by Scenario-001)
+  /** Opens the calendar and picks a date, e.g. pickDateOfBirthFromCalendar(5, 'November', 2006). */
+  public async pickDateOfBirthFromCalendar(day: number, month: string, year: number): Promise<void> {
+    await this.dateOfBirthField.click();
+    await this.datePickerCalendar.waitFor();
+    await this.datePickerYearSelect.selectOption(String(year));
+    await this.datePickerMonthSelect.selectOption({ label: month });
+    await this.calendarDay(day, month, year).click();
+  }
+
+  // Created By AI — calendar day cell matched by its accessible label, e.g. "Choose Sunday, November 5th, 2006"
+  public calendarDay(day: number, month: string, year: number): Locator {
+    const suffix = day % 10 === 1 && day !== 11 ? 'st' : day % 10 === 2 && day !== 12 ? 'nd' : day % 10 === 3 && day !== 13 ? 'rd' : 'th';
+    return this.datePickerCalendar.getByRole('option', { name: new RegExp(`, ${month} ${day}${suffix}, ${year}$`) });
   }
 
   public async setCurrentAddress(address: string): Promise<void> {
