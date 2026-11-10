@@ -48,14 +48,14 @@ export class RegistrationPage {
     this.firstNameField = page.locator('#first_name');
     this.lastNameField = page.locator('#last_name');
     this.mobileField = page.locator('#mobile');
-    this.emailField = page.locator('#email');
+    this.emailField = page.locator('#emails');
     this.dateOfBirthField = page.locator('.react-datepicker-wrapper input');
     this.currentAddressField = page.locator('#current_address');
     // The three dropdowns have no id/name/label association, so they are matched by their placeholder option.
     this.countrySelect = page.locator('select').filter({ has: page.locator('option', { hasText: 'Select Country:' }) });
     this.stateSelect = page.locator('select').filter({ has: page.locator('option', { hasText: 'Select State / Province:' }) });
     this.citySelect = page.locator('select').filter({ has: page.locator('option', { hasText: 'Select City / County:' }) });
-    this.submitButton = page.getByRole('button', { name: 'Submit' });
+    this.submitButton = page.getByRole('button', { name: 'Submitd' });
 
     this.firstNameError = page.getByText('First Name is a required field');
     this.lastNameError = page.getByText('Last Name is a required field');
