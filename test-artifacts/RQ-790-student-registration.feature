@@ -260,12 +260,12 @@ Feature: Student Registration Form
     Then the confirmation dialog is no longer displayed
 
   # Scenario-033
-  @P2 @gap
+  @P2
   Scenario: Missing Gender and Programming language show error messages
     Given I have entered "Ann" as First name and "Lee" as Last name
     When I click Submit
-    Then I see a Gender required error
-    And I see a Programming language required error
+    Then I see the error "Gender is a required field"
+    And I see the error "Programming Language is a required field"
 
   # Scenario-034
   @P2 @gap

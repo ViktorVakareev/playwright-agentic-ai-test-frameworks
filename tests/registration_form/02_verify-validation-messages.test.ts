@@ -63,14 +63,14 @@ test.describe('Registration form - validation messages', () => {
     await expect(registrationPage.confirmationDialog).toBeHidden();
   });
 
-  // Known gap G-01 (see test-artifacts/RQ-790-test-strategy.md): the form blocks submission
-  // but shows no message for Gender or Programming language. Remove .fail once fixed.
-  test('missing Gender and Programming language show error messages', async ({ page }) => {
-    test.fail(true, 'G-01: no error message is shown for Gender / Programming language');
+  // Created By AI — corrected: G-01 was a false finding; these messages exist (rendered as <p>, not the name-error <div>).
+  test('missing Gender and Programming language show error messages', async () => {
     await registrationPage.setFirstName('Ann');
     await registrationPage.setLastName('Lee');
     await registrationPage.clickSubmitButton();
 
-    await expect(page.locator('.chakra-form__error-message')).toHaveCount(2, { timeout: 3000 });
+    await expect(registrationPage.genderError).toBeVisible();
+    await expect(registrationPage.programmingLanguageError).toBeVisible();
+    await expect(registrationPage.confirmationDialog).toBeHidden();
   });
 });

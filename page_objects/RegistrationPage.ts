@@ -1,4 +1,4 @@
-import { type Page, type Locator } from '@playwright/test';
+import { type Page, type Locator, expect } from '@playwright/test';
 
 export type Gender = 'Male' | 'Female' | 'Other';
 export type ProgrammingLanguage = 'Java' | 'Python' | 'JavaScript' | 'TypeScript' | 'C#';
@@ -26,6 +26,9 @@ export class RegistrationPage {
   // Validation errors
   readonly firstNameError: Locator;
   readonly lastNameError: Locator;
+  // Created By AI — additional required-field messages seen in .playwright-cli/tc290-04-after-submit.yml
+  readonly genderError: Locator;
+  readonly programmingLanguageError: Locator;
 
   // Created By AI — Date of birth calendar (required by Scenario-001)
   readonly datePickerCalendar: Locator;
@@ -65,6 +68,9 @@ export class RegistrationPage {
 
     this.firstNameError = page.getByText('First Name is a required field');
     this.lastNameError = page.getByText('Last Name is a required field');
+    // Created By AI — rendered as <p>, unlike the name errors (<div aria-live="polite">)
+    this.genderError = page.getByText('Gender is a required field');
+    this.programmingLanguageError = page.getByText('Programming Language is a required field');
 
     // Created By AI — Date of birth calendar (required by Scenario-001)
     this.datePickerCalendar = page.locator('.react-datepicker');
@@ -170,5 +176,33 @@ export class RegistrationPage {
 
   public async closeConfirmationDialog(): Promise<void> {
     await this.dialogCloseButton.click();
+  }
+
+  // Created By AI — verification methods for TC:290 (so specs never assert on raw elements)
+  /** TC:290 Step 2: the Practice Form / Student Registration Form is displayed. */
+  public async verifyFormDisplayed(): Promise<void> {
+    await expect(this.page).toHaveURL(/\/practice-form/);
+    await expect(this.heading).toBeVisible();
+    await expect(this.subtitle).toBeVisible();
+  }
+
+  /** TC:290 Step 3: First and Last name are empty and no name errors are shown. */
+  public async verifyNameFieldsEmptyWithoutErrors(): Promise<void> {
+    await expect(this.firstNameField).toBeEmpty();
+    await expect(this.lastNameField).toBeEmpty();
+    await expect(this.firstNameError).toBeHidden();
+    await expect(this.lastNameError).toBeHidden();
+  }
+
+  /** TC:290 Step 4: the Email field holds the entered value. */
+  public async verifyEmailValue(email: string): Promise<void> {
+    await expect(this.emailField).toHaveValue(email);
+  }
+
+  /** TC:290 Step 5: required messages under First and Last name; the form was not submitted. */
+  public async verifyNameRequiredErrorsDisplayed(): Promise<void> {
+    await expect(this.firstNameError).toBeVisible();
+    await expect(this.lastNameError).toBeVisible();
+    await expect(this.confirmationDialog).toBeHidden();
   }
 }

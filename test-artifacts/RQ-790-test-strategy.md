@@ -13,7 +13,7 @@
 | Layout | 11 inputs: `#first_name`, `#last_name`, gender radios (`data-testid` male/female/other), `#mobile`, `#email`, Date of birth (react-datepicker), `#current_address`, 5 language checkboxes (ids `Java`, `Python`, `JavaScript`, `TypeScript`, `C#`), Country / State / City `<select>`s, Submit button |
 | Required markers | `*` shown on First name, Last name, Gender, Programming language. No field carries the HTML `required` attribute. |
 | Empty submit | Inline errors only for **"First Name is a required field"** and **"Last Name is a required field"**. |
-| Missing Gender or Language | Submit is **silently blocked**: no dialog, no error text, no focus move. |
+| Missing Gender or Language | Submit is blocked and shows **"Gender is a required field"** / **"Programming Language is a required field"** (rendered as `<p>`, unlike the name errors). *Corrected 2026-11-10 — first pass missed these.* |
 | Success | Modal **"Thanks for submitting the form"** with a LABEL / VALUES table of all 11 fields; closable via **Close** button, the **X** icon, or clicking the overlay. **Esc** did not close it in testing. |
 | After closing | Form keeps all entered values (no reset). |
 | Backend | No submit request is sent: the only network calls are `GET /data/locations/{Country}/states.json` and `.../{state}.json`. Submission is client-side only. |
@@ -32,7 +32,7 @@
 
 | # | Gap | Evidence | Risk |
 |---|---|---|---|
-| G-01 | **Gender and Programming language are marked mandatory but have no error message.** Submit silently does nothing. | Skip either → no dialog, no error | High — users think the form is broken |
+| G-01 | ~~Gender and Programming language have no error message~~ **Withdrawn** — the messages exist. Remaining gap: their markup (`<p>`) is inconsistent with the name errors (`<div aria-live="polite">`), so screen readers may not announce them. | `.playwright-cli/tc290-04-after-submit.yml` | Low (accessibility) |
 | G-02 | **Mobile validation is undefined.** "10 Digits" is in the label only; letters, symbols and short numbers are accepted. | `abcdefghij`, `12345`, `555-123-45` all submit | High — bad contact data |
 | G-03 | **Email has no format rule** and is not marked required. | `not-an-email` submits | High |
 | G-04 | **Date of birth has no range rule** — future dates and today are allowed; no minimum/maximum age. | 12/25/2030 accepted | Medium |
@@ -114,7 +114,7 @@
 | Scenario-030 | HTML in names is shown as text, not rendered |
 | Scenario-031 | Very long name / address values are handled |
 | Scenario-032 | Esc closes the confirmation dialog *(FAIL today — question 8)* |
-| Scenario-033 | Error shown for missing Gender / Language *(FAIL today — G-01)* |
+| Scenario-033 | Error shown for missing Gender / Language *(passes — G-01 withdrawn)* |
 | Scenario-034 | No console errors on page load *(FAIL today — G-14)* |
 
 Scenarios marked *FAIL today* encode the **expected** behavior and are tagged `@gap` in the
