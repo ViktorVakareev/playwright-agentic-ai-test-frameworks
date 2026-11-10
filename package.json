@@ -1,13 +1,28 @@
 {
   "name": "playwright-agentic-ai-test-frameworks",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Playwright + TypeScript test framework built with agentic AI: Planner, Generator and Healer agents, playwright-cli, Page Object Model and BDD test artifacts.",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "playwright test",
+    "test:smoke": "playwright test --grep @smoke",
+    "test:p0": "playwright test --grep @P0",
+    "test:login": "playwright test tests/login",
+    "test:registration": "playwright test tests/registration_form",
+    "test:bookstore": "playwright test tests/book_store",
+    "test:headed": "playwright test --headed",
+    "report": "playwright show-report",
+    "typecheck": "tsc --noEmit"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "playwright",
+    "typescript",
+    "test-automation",
+    "page-object-model",
+    "bdd",
+    "ai-agents",
+    "mcp"
+  ],
+  "author": "Viktor Vakareev",
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {

@@ -1,2 +1,16 @@
-# Playwright CLI output (may contain credentials)
+# Dependencies
+node_modules/
+
+# Playwright output
+playwright-report/
+test-results/
+blob-report/
+playwright/.cache/
+
+# Playwright CLI / MCP snapshots (may contain credentials)
 .playwright-cli/
+.playwright-mcp/
+
+# OS / editor
+.DS_Store
+Thumbs.db
