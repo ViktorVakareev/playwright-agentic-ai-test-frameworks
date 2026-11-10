@@ -1,0 +1,34 @@
+{
+  "servers": {
+    "playwright-test": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "playwright",
+        "run-test-mcp-server"
+      ]
+    },
+    "inflectra-spira": {
+      "type": "stdio",
+      "command": "py",
+      "args": [
+        "-3.12",
+        "-m",
+        "mcp_server_spira"
+      ],
+      "env": {
+        "INFLECTRA_SPIRA_BASE_URL": "https://demo-us.spiraservice.net/test-for-success",
+        "INFLECTRA_SPIRA_USERNAME": "administrator",
+        "INFLECTRA_SPIRA_API_KEY": "${input:spira-api-key}"
+      }
+    }
+  },
+  "inputs": [
+    {
+      "id": "spira-api-key",
+      "type": "promptString",
+      "description": "Inflectra Spira API key",
+      "password": true
+    }
+  ]
+}
