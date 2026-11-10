@@ -48,6 +48,13 @@ export class RegistrationPage {
     this.firstNameField = page.locator('#first_name');
     this.lastNameField = page.locator('#last_name');
     this.mobileField = page.locator('#mobile');
+    // ⚠️ Created By AI — HEALER ALERT (locator NOT modified)
+    // Failure: 04_verify-all-fields-valid.test.ts → setEmail() → "locator.fill: Test timeout of 30000ms exceeded.
+    //          waiting for locator('#emails')".
+    // Discrepancy: our selector targets id "emails" (plural). The live DOM has 0 matches for #emails; the field is
+    //   <input placeholder="Email " type="text" id="email" class="email"> → id is "email" (singular).
+    // Recommendation: change '#emails' to '#email' (1 match), or use the more resilient accessible locator
+    //   page.getByRole('textbox', { name: 'Email' }) (1 match). Re-run 04_verify-all-fields-valid.test.ts after the fix.
     this.emailField = page.locator('#emails');
     this.dateOfBirthField = page.locator('.react-datepicker-wrapper input');
     this.currentAddressField = page.locator('#current_address');
@@ -55,6 +62,12 @@ export class RegistrationPage {
     this.countrySelect = page.locator('select').filter({ has: page.locator('option', { hasText: 'Select Country:' }) });
     this.stateSelect = page.locator('select').filter({ has: page.locator('option', { hasText: 'Select State / Province:' }) });
     this.citySelect = page.locator('select').filter({ has: page.locator('option', { hasText: 'Select City / County:' }) });
+    // ⚠️ Created By AI — HEALER ALERT (locator NOT modified)
+    // Latent failure: not reached in this run because setEmail() fails first, but clickSubmitButton() will time out next.
+    // Discrepancy: our accessible name is "Submitd" (extra "d"). The live DOM has 0 buttons named "Submitd"; the button is
+    //   <button type="submit" name="submit" id="button-20">Submit</button> → accessible name is "Submit".
+    //   (getByRole name matching is substring-based, so "Submitd" can never match the shorter text "Submit".)
+    // Recommendation: change the name to 'Submit' (1 match). Avoid id "button-20" — it looks auto-generated and may change.
     this.submitButton = page.getByRole('button', { name: 'Submitd' });
 
     this.firstNameError = page.getByText('First Name is a required field');
